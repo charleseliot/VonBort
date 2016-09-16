@@ -20,6 +20,8 @@ shinyUI(fluidPage(
              br(),
              div("The von Bortkiewicz data set is included in the R library", strong("vcd"), "as", strong("VonBort"), "."),
              br(),
+             div("Now click on the", strong("Model Fitting"), "tab to play around with the data a bit."),
+             br(),
              tableOutput("table")),
     tabPanel("Model Fitting",
              br(),
@@ -44,7 +46,7 @@ shinyUI(fluidPage(
                )
              ),
              br(),
-             div("We can use R's goodfit() function to try different model distributions. The Poisson distribution is far better than the Binomial Distribution, but the Negative Binomial distribution is better than either."),
+             div("We can use R's goodfit() function to try different model distributions. Pick a model from the drop-down list, and see how well the model fits the observed data. The Poisson distribution is far better than the Binomial Distribution, but the Negative Binomial distribution even better."),
              br(),
              sidebarLayout(
                sidebarPanel(
