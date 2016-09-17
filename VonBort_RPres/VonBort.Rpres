@@ -1,0 +1,58 @@
+The von Bortkiewicz Data Set
+========================================================
+author: Charles Eliot
+date: September 2016
+autosize: true
+
+The von Bortkiewicz Data Set
+========================================================
+
+- deaths from horse kicks in 14 Prussian Army corps from 1875-1894
+- published in 1898 by Ladislaus von Bortkiewicz
+- an early example of using a Poisson distribution to model rare events
+
+![Original data](vonBort.jpg)
+
+Getting the data
+========================================================
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+library(ggplot2)
+library(ggthemes)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(vcd)
+data("VonBort")
+```
+
+Sample data analysis
+========================================================
+
+This plot shows the total number of deaths per year, summed over all 14 corps. The green trend line is based on a Poisson GLM model, and shows that the rate of deaths from horse-kicks increased by approximately 1.9% per year.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.height=4}
+pal <- fivethirtyeight_pal()(3)
+
+by.year <- VonBort %>% group_by(year) %>% summarize(deaths=sum(deaths))
+m1 <- glm(data=by.year, deaths ~ year, family="poisson")
+
+g <- ggplot(data=by.year, aes(x=year, y=deaths)) +
+  geom_bar(stat = "identity") +
+  geom_line(aes(y=m1$fitted.values), colour = pal[3], size = 2)
+
+print(g)
+print(paste("Per-year rate of increase: ",
+            round(100 * (exp(m1$coefficients[2]) - 1), 2),
+            "%",
+            sep = ""))
+
+```
+
+Shiny web site
+========================================================
+
+If you want to experiment with the von Bortkiewicz data set, visit this Shiny web application:
+
+https://charleseliot.shinyapps.io/VonBort/
